@@ -1,5 +1,8 @@
 package devsu.challenge.bank.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -69,6 +72,13 @@ public class PedidoCabeceraServiceImpl implements PedidoCabeceraService {
 			productoRepository.save(productoPorTienda.getProducto());
 		}
 		return modelMapper.map(pedidoCabecera, PedidoCabeceraDTO.class);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<PedidoDetalleDTO> transaccionesPorTienda(Long idTienda) {
+		List<PedidoDetalle> detalles = pedidoDetalleRepository.findByTienda(idTienda).orElse(null);
+		return detalles.stream().map(detalle -> modelMapper.map(detalle, PedidoDetalleDTO.class)).collect(Collectors.toList());
 	}
 
 	private Cliente buscarClientePorId(Long clienteId) {
