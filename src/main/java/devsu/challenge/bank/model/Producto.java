@@ -19,30 +19,30 @@ import lombok.Setter;
 import lombok.Singular;
 
 @Entity
-@Table(name = "producto")
+@Table(name = "PRODUCTO")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Producto {
 
 	public static final int CODE_MAX_SIZE = 10;
-	public static final int NAME_MAX_SIZE = 10;
+	public static final int NAME_MAX_SIZE = 20;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_producto")
+	@Column(name = "ID_PRODUCTO")
 	private Long idProducto;
 
-	@Column(name = "codigo", nullable = false, length = CODE_MAX_SIZE)
+	@Column(name = "CODIGO", nullable = false, length = CODE_MAX_SIZE)
 	private String codigo;
 
-	@Column(name = "nombre", nullable = false, length = NAME_MAX_SIZE)
+	@Column(name = "NOMBRE", nullable = false, length = NAME_MAX_SIZE)
 	private String nombre;
 
-	@Column(name = "precio", nullable = false, precision = 18, scale = 6)
+	@Column(name = "PRECIO", nullable = false, precision = 18, scale = 6)
 	private Float precio;
 	
-	@Column(name = "stock", nullable = false)
+	@Column(name = "STOCK", nullable = false)
 	private Integer stock;
 
 	@Singular

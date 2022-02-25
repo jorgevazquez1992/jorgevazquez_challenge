@@ -19,7 +19,7 @@ import lombok.Setter;
 import lombok.Singular;
 
 @Entity
-@Table(name = "tienda")
+@Table(name = "TIENDA")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,10 +29,10 @@ public class Tienda {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "idTienda", nullable = false)
+	@Column(name = "ID_TIENDA", nullable = false)
     private Long idTienda;
 	
-	@Column(name = "nombre", nullable = false, length = NAME_MAX_SIZE)
+	@Column(name = "NOMBRE", nullable = false, length = NAME_MAX_SIZE)
     private String nombre;
 	
 	@Singular

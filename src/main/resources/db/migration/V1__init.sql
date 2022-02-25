@@ -1,64 +1,64 @@
-drop table if exists "cliente" CASCADE;
-drop table if exists "pedido_detalle" CASCADE;
-drop table if exists "pedido_cabecera" CASCADE;
-drop table if exists "producto_por_tienda" CASCADE;
-drop table if exists "producto" CASCADE;
-drop table if exists "tienda" CASCADE;
+DROP TABLE IF EXISTS "CLIENTE" CASCADE;
+DROP TABLE IF EXISTS "PEDIDO_DETALLE" CASCADE;
+DROP TABLE IF EXISTS "PEDIDO_CABECERA" CASCADE;
+DROP TABLE IF EXISTS "PRODUCTO_POR_TIENDA" CASCADE;
+DROP TABLE IF EXISTS "PRODUCTO" CASCADE;
+DROP TABLE IF EXISTS "TIENDA" CASCADE;
 
-create sequence IF NOT EXISTS hibernate_sequence start with 4 increment by 1;
+CREATE SEQUENCE IF NOT EXISTS HIBERNATE_SEQUENCE START WITH 4 INCREMENT BY 1;
 
-CREATE TABLE "cliente" (
-    "id_cliente" bigint not null, 
-    "identificacion" varchar(13) not null,
-    "nombre" varchar(50) not null,
-    "url_foto" varchar(50) not null,
-     primary key ("id_cliente")
+CREATE TABLE "CLIENTE" (
+    "ID_CLIENTE" BIGINT NOT NULL, 
+    "IDENTIFICACION" VARCHAR(13) NOT NULL,
+    "NOMBRE" VARCHAR(50) NOT NULL,
+    "URL_FOTO" VARCHAR(50) NOT NULL,
+     PRIMARY KEY ("ID_CLIENTE")
 );
 
-CREATE TABLE "tienda" (
-    "id_tienda" bigint not null, 
-    "nombre" varchar(100) not null,
-     primary key ("id_tienda")
+CREATE TABLE "TIENDA" (
+    "ID_TIENDA" BIGINT NOT NULL, 
+    "NOMBRE" VARCHAR(100) NOT NULL,
+     PRIMARY KEY ("ID_TIENDA")
 );
 
-CREATE TABLE "producto" (
-    "id_producto" bigint not null, 
-    "codigo" varchar(10) not null,
-    "nombre" varchar(10) not null,
-    "precio" float not null,
-    "stock" int not null,
-     primary key ("id_producto")
+CREATE TABLE "PRODUCTO" (
+    "ID_PRODUCTO" BIGINT NOT NULL, 
+    "CODIGO" VARCHAR(10) NOT NULL,
+    "NOMBRE" VARCHAR(15) NOT NULL,
+    "PRECIO" FLOAT NOT NULL,
+    "STOCK" INT NOT NULL,
+     PRIMARY KEY ("ID_PRODUCTO")
 );
 
-CREATE TABLE "producto_por_tienda" (
-    "id_producto_por_tienda" bigint not null, 
-    "id_producto" bigint not null,
-    "id_tienda" bigint not null,  
-     primary key ("id_producto_por_tienda")
+CREATE TABLE "PRODUCTO_POR_TIENDA" (
+    "ID_PRODUCTO_POR_TIENDA" BIGINT NOT NULL, 
+    "ID_PRODUCTO" BIGINT NOT NULL,
+    "ID_TIENDA" BIGINT NOT NULL,  
+     PRIMARY KEY ("ID_PRODUCTO_POR_TIENDA")
 );
 
-alter table "producto_por_tienda" add constraint "fk_ppt_p" foreign key ("id_producto") references "producto";
-alter table "producto_por_tienda" add constraint "fk_ppt_t" foreign key ("id_tienda") references "tienda";
+ALTER TABLE "PRODUCTO_POR_TIENDA" ADD CONSTRAINT "FK_PPT_P" FOREIGN KEY ("ID_PRODUCTO") REFERENCES "PRODUCTO";
+ALTER TABLE "PRODUCTO_POR_TIENDA" ADD CONSTRAINT "FK_PPT_T" FOREIGN KEY ("ID_TIENDA") REFERENCES "TIENDA";
 
-CREATE TABLE "pedido_cabecera" (
-    "id_pedido_cabecera" bigint not null, 
-    "id_cliente" bigint not null,
-    "fecha_pedido" Date not null,  
-     primary key ("id_pedido_cabecera")
+CREATE TABLE "PEDIDO_CABECERA" (
+    "ID_PEDIDO_CABECERA" BIGINT NOT NULL, 
+    "ID_CLIENTE" BIGINT NOT NULL,
+    "FECHA_PEDIDO" DATE NOT NULL,  
+     PRIMARY KEY ("ID_PEDIDO_CABECERA")
 );
 
-CREATE TABLE "pedido_detalle" (
-	"id_pedido_detalle" bigint not null,
-	"id_pedido_cabecera" bigint not null,
-	"id_producto_por_tienda" bigint not null,
-	"cantidad" int not null,
-	 primary key ("id_pedido_detalle")
+CREATE TABLE "PEDIDO_DETALLE" (
+	"ID_PEDIDO_DETALLE" BIGINT NOT NULL,
+	"ID_PEDIDO_CABECERA" BIGINT NOT NULL,
+	"ID_PRODUCTO_POR_TIENDA" BIGINT NOT NULL,
+	"CANTIDAD" INT NOT NULL,
+	 PRIMARY KEY ("ID_PEDIDO_DETALLE")
 );
 
-alter table "pedido_detalle" add constraint "fk_pd_pc" foreign key ("id_pedido_cabecera") references "pedido_cabecera";
-alter table "pedido_detalle" add constraint "fk_pd_ppt" foreign key ("id_producto_por_tienda") references "producto_por_tienda";
+ALTER TABLE "PEDIDO_DETALLE" ADD CONSTRAINT "FK_PD_PC" FOREIGN KEY ("ID_PEDIDO_CABECERA") REFERENCES "PEDIDO_CABECERA";
+ALTER TABLE "PEDIDO_DETALLE" ADD CONSTRAINT "FK_PD_PPT" FOREIGN KEY ("ID_PRODUCTO_POR_TIENDA") REFERENCES "PRODUCTO_POR_TIENDA";
 
-insert into "tienda" ("id_tienda", "nombre") values (1,'Tienda 1');
-insert into "tienda" ("id_tienda", "nombre") values (2,'Tienda 2');
-insert into "tienda" ("id_tienda", "nombre") values (3,'Tienda 3');
-insert into "tienda" ("id_tienda", "nombre") values (4,'Tienda 4');
+INSERT INTO "TIENDA" ("ID_TIENDA", "NOMBRE") VALUES (1,'TIENDA 1');
+INSERT INTO "TIENDA" ("ID_TIENDA", "NOMBRE") VALUES (2,'TIENDA 2');
+INSERT INTO "TIENDA" ("ID_TIENDA", "NOMBRE") VALUES (3,'TIENDA 3');
+INSERT INTO "TIENDA" ("ID_TIENDA", "NOMBRE") VALUES (4,'TIENDA 4');

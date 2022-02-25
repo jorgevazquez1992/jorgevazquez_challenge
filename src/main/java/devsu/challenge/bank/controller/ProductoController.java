@@ -7,10 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import devsu.challenge.bank.dto.ProductoDTO;
 import devsu.challenge.bank.service.ProductoService;
 
+@RestController
+@RequestMapping("/producto")
 public class ProductoController {
 
 	private ProductoService productoService;

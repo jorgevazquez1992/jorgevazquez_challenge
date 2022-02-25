@@ -20,21 +20,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "pedido_cabecera")
+@Table(name = "PEDIDO_CABECERA")
 @Getter
 @Setter
 public class PedidoCabecera {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_pedido_cabecera", nullable = false)
+	@Column(name = "ID_PEDIDO_CABECERA", nullable = false)
 	private Long idPedidoCabecera;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "ID_CLIENTE", nullable = false)
 	private Cliente cliente;
 	
-	@Column(name = "fecha_pedido", nullable = false)
+	@Column(name = "FECHA_PEDIDO", nullable = false)
 	private Date fechaPedido;
 	
 	@OneToMany(cascade = CascadeType.ALL,

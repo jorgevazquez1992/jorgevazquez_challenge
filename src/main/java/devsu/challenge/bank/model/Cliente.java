@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "CLIENTE")
 @Getter
 @Setter
 public class Cliente {
@@ -21,16 +21,16 @@ public class Cliente {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_cliente")
+	@Column(name = "ID_CLIENTE")
 	private Long idCliente;
 	
-	@Column(name = "identificacion", nullable = false, length = CODE_MAX_SIZE)
+	@Column(name = "IDENTIFICACION", nullable = false, length = CODE_MAX_SIZE)
 	private String identificacion;
 	
-	@Column(name = "nombre", nullable = false, length = NAME_MAX_SIZE)
+	@Column(name = "NOMBRE", nullable = false, length = NAME_MAX_SIZE)
 	private String nombre;
 	
-	@Column(name = "url_foto", nullable = false)
+	@Column(name = "URL_FOTO", nullable = false)
 	private String urlFoto;
 	
 }

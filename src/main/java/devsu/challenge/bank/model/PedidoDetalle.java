@@ -13,25 +13,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "pedido_detalle")
+@Table(name = "PEDIDO_DETALLE")
 @Getter
 @Setter
 public class PedidoDetalle {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_pedido_detalle", nullable = false)
+	@Column(name = "ID_PEDIDO_DETALLE", nullable = false)
 	private Long idPedidoDetalle;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_pedido_cabecera", nullable = false)
+    @JoinColumn(name = "ID_PEDIDO_CABECERA", nullable = false)
 	private PedidoCabecera pedidoCabecera;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_producto_por_tienda", nullable = false)
+    @JoinColumn(name = "ID_PRODUCTO_POR_TIENDA", nullable = false)
 	private ProductoPorTienda productoPorTienda;
 
-	@Column(name = "cantidad", nullable = false)
+	@Column(name = "CANTIDAD", nullable = false)
 	private Integer cantidad;
 	
 }
