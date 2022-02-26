@@ -1,5 +1,11 @@
 ## Usage
 
+Prepare the app
+```shell script
+mvn clean
+mvn install
+```
+
 Run the app (Or you can run in your IDE). 
 
 ```shell script
