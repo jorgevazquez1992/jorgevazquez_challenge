@@ -1,5 +1,6 @@
 package devsu.challenge.bank.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import devsu.challenge.bank.dto.MontoDTO;
+import devsu.challenge.bank.dto.NumeroTransaccionesDTO;
 import devsu.challenge.bank.dto.PedidoCabeceraDTO;
 import devsu.challenge.bank.dto.PedidoDetalleDTO;
+import devsu.challenge.bank.dto.TransaccionesClienteDTO;
 import devsu.challenge.bank.exception.ResourceNotFoundException;
 import devsu.challenge.bank.exception.UnprocessableEntityException;
 import devsu.challenge.bank.model.Cliente;
@@ -73,12 +77,57 @@ public class PedidoCabeceraServiceImpl implements PedidoCabeceraService {
 		}
 		return modelMapper.map(pedidoCabecera, PedidoCabeceraDTO.class);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<PedidoDetalleDTO> transaccionesPorTienda(Long idTienda) {
 		List<PedidoDetalle> detalles = pedidoDetalleRepository.findByTienda(idTienda).orElse(null);
-		return detalles.stream().map(detalle -> modelMapper.map(detalle, PedidoDetalleDTO.class)).collect(Collectors.toList());
+		return detalles.stream().map(detalle -> modelMapper.map(detalle, PedidoDetalleDTO.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<NumeroTransaccionesDTO> transacciones() {
+		return pedidoDetalleRepository.contarPorTiendaFecha();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<MontoDTO> montoPorProductoTienda() {
+		List<MontoDTO> respuesta = new ArrayList<MontoDTO>();
+		List<PedidoDetalle> detalles = pedidoDetalleRepository.findAll();
+		if (!detalles.isEmpty()) {
+			List<ProductoPorTienda> productosPorTienda = detalles.stream()
+					.map(detalle -> detalle.getProductoPorTienda()).distinct().collect(Collectors.toList());
+			for (ProductoPorTienda productoPorTienda : productosPorTienda) {
+				MontoDTO mDto = new MontoDTO();
+				mDto.setIdProducto(productoPorTienda.getProducto().getIdProducto());
+				mDto.setNombreProducto(productoPorTienda.getProducto().getNombre());
+				mDto.setIdTienda(productoPorTienda.getTienda().getIdTienda());
+				mDto.setNombreTienda(productoPorTienda.getTienda().getNombre());
+				Float monto = detalles.stream()
+						.filter(detalle -> detalle.getProductoPorTienda().getIdProductoPorTienda() == productoPorTienda
+								.getIdProductoPorTienda())
+						.map(detalle -> detalle.getCantidad()
+								* detalle.getProductoPorTienda().getProducto().getPrecio())
+						.reduce(0f, Float::sum);
+				mDto.setMonto(monto);
+				respuesta.add(mDto);
+			}
+		}
+		return respuesta;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<PedidoDetalle> buscarPorClienteRango(TransaccionesClienteDTO transaccionesClienteDTO) {
+		buscarClientePorId(transaccionesClienteDTO.getIdCliente());
+		if (transaccionesClienteDTO.getFechaInicio().after(transaccionesClienteDTO.getFechaFin())) {
+			throw new UnprocessableEntityException("Rango de fechas invalido");
+		}
+		List<PedidoDetalle> resultado = pedidoDetalleRepository.buscarPorClienteRango(transaccionesClienteDTO.getIdCliente(), transaccionesClienteDTO.getFechaInicio(),transaccionesClienteDTO.getFechaFin()).orElse(null);
+		return resultado;
 	}
 
 	private Cliente buscarClientePorId(Long clienteId) {
@@ -116,10 +165,10 @@ public class PedidoCabeceraServiceImpl implements PedidoCabeceraService {
 	@Async
 	private void actualizarStockAsincrono(Producto producto) {
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<GenericResponse> response = restTemplate.getForEntity(
-				"https://mocki.io/v1/7efa94f9-4bef-4213-972b-1338177edf9a", GenericResponse.class);
+		ResponseEntity<GenericResponse> response = restTemplate
+				.getForEntity("https://mocki.io/v1/7efa94f9-4bef-4213-972b-1338177edf9a", GenericResponse.class);
 		producto.setStock(producto.getStock() + response.getBody().getStock());
 		producto = productoRepository.save(producto);
 	}
-	
+
 }
